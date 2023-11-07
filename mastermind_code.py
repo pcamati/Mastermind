@@ -105,21 +105,20 @@ class game:
             else:
                 break
 
-    def check_key_pegs(self, guessed_attempt):
+    def check_key_pegs(self, guessed_attempt: list):
         black_pegs = 0
         white_pegs = 0
         temporary_guessed_attempt = guessed_attempt[:]
         temporary_decoding_board = self.decoding_board[:]
-        for attempt, decoding_peg in zip(temporary_guessed_attempt, temporary_decoding_board):
-            if attempt == decoding_peg:
+        for guessed_peg, decoding_peg in zip(guessed_attempt, self.decoding_board):
+            if guessed_peg == decoding_peg:
                 black_pegs += 1
                 temporary_decoding_board.remove(decoding_peg)
-                temporary_guessed_attempt.remove(attempt)
+                temporary_guessed_attempt.remove(guessed_peg)
         for colors in temporary_guessed_attempt:
                 if colors in temporary_decoding_board:
                     white_pegs += 1
                     temporary_decoding_board.remove(colors)
-        print('1')
         self.key_pegs.append(['black']*black_pegs+['white']*white_pegs)
 
     def guess_turn(self, codebreaker, attempt):
