@@ -79,7 +79,8 @@ class game:
         self.player_two = player_two
         self.code_pegs = []
         self.key_pegs = []
-        self.score = []
+        self.score_player_one = []
+        self.score_player_two = []
         self.codemaker = None
         self.codebreaker = None
         self.decoding_board = []
@@ -106,6 +107,10 @@ class game:
                 break
         return guessed_attempt
 
+    def is_correct_guess(guessed_attempt):
+        #check if the guess is the correct code
+        pass
+
     def check_key_pegs(self, guessed_attempt: list):
         black_pegs = 0
         white_pegs = 0
@@ -122,24 +127,24 @@ class game:
                     temporary_decoding_board.remove(colors)
         self.key_pegs.append(['black']*black_pegs+['white']*white_pegs)
 
-    def guess_turn(self, codebreaker, attempt):
-        guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ").split()
-        guessed_attempt = self.is_attempt_valid(guessed_attempt)
-        self.guessed_list.append(guessed_attempt)
-        self.check_key_pegs(guessed_attempt)
-        
-        if guessed_attempt==self.decoding_board:
-            print(f"Congratulations {codebreaker.upper()}! You guessed right in {attempt+1} attempts. {attempt} points are added to {codebreaker.upper()}")
-        else:
-            print(f"{codebreaker.upper()}, please guess again")
-
-
     def play_round(self, codemaker, codebreaker, round):
-        print(f"Round number {round} starts")
+        print(f"\n Round number {round} starts \n")
         self.set_decoding_board(codemaker)
         for attempt in range(game.number_attempts):
-            self.guess_turn(codebreaker, attempt)
+            guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ")
+            guessed_attempt = guessed_attempt.split()
+            guessed_attempt = self.is_attempt_valid(guessed_attempt)            
+            self.guessed_list.append(guessed_attempt)
+            self.check_key_pegs(guessed_attempt)
             self.display_board()
+
+            if guessed_attempt==self.decoding_board:
+                print(f"\n Congratulations {codebreaker.upper()}! You guessed right in {attempt+1} attempts. {attempt} points are added to {codebreaker.upper()} \n")
+                break
+
+    def display_score():
+        #create function that displays the score
+        pass
 
     def play_game(self):
         for round in range(self.rounds):
@@ -151,11 +156,14 @@ class game:
                 self.codemaker = self.player_two
                 self.codebreaker = self.player_one
             self.play_round(self.codemaker, self.codebreaker, round)
+            self.
+            self.display_score()
 
 
 player_one_name = input("Please, input Player One's name: ")
 player_two_name = input ("Please, input Player Two's name: ")
-number_rounds = int(input("Please, set the total number of rounds to be played: "))
+number_rounds = input("Please, set the total number of rounds to be played: ")
+number_rounds = int(number_rounds)
 
 mastermind = game(number_rounds, player_one_name, player_two_name)
 
