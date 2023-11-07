@@ -63,7 +63,8 @@ number of games are played.
 class game:
 
     decoding_board_size = 4
-    number_attempts = 12
+    #for testing purposes gonna set the value to 4
+    number_attempts = 4 #12
 
     def __init__(self,number_rounds, player_one, player_two):
         if not isinstance(number_rounds, int):
@@ -78,7 +79,6 @@ class game:
         self.player_two = player_two
         self.code_pegs = []
         self.key_pegs = []
-        # self.key_size = len(self.key_pegs)
         self.score = []
         self.codemaker = None
         self.codebreaker = None
@@ -89,9 +89,9 @@ class game:
         self.code_pegs = code_pegs
 
     def display_board(self):
-        print("Guessed Attempts                | | |  Key pegs \n")
+        print("\n      Guessed Attempts                | | |       Key pegs \n")
         for line in range(len(self.guessed_list)):
-            print(" | ".join(self.guessed_list[line])+" | | "+" | ".join(self.key_pegs[line]))
+            print(" | ".join(self.guessed_list[line])+" | | | "+" | ".join(self.key_pegs[line]))
 
     def set_decoding_board(self, codemaker):
         self.decoding_board = input(f"{codemaker.upper()}, please enter a sequence of colored pegs for the decoding board: ").split()
@@ -99,11 +99,12 @@ class game:
     def is_attempt_valid(self, guessed_attempt):
         while True:
             if len(guessed_attempt)!=len(self.decoding_board):
-                guessed_attempt = input("Please enter a valid guess")
+                guessed_attempt = input("Please enter a valid guess: ").split()
                 if guessed_attempt=='exit':
                     break
             else:
                 break
+        return guessed_attempt
 
     def check_key_pegs(self, guessed_attempt: list):
         black_pegs = 0
@@ -123,8 +124,8 @@ class game:
 
     def guess_turn(self, codebreaker, attempt):
         guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ").split()
+        guessed_attempt = self.is_attempt_valid(guessed_attempt)
         self.guessed_list.append(guessed_attempt)
-        self.is_attempt_valid(guessed_attempt)
         self.check_key_pegs(guessed_attempt)
         
         if guessed_attempt==self.decoding_board:
@@ -161,9 +162,8 @@ mastermind = game(number_rounds, player_one_name, player_two_name)
 mastermind.play_game()
        
 
-# a = round(2, 'pac', 'gabi', 4, 2, 'pac', 'pi')
-# a.set_code_pegs(['red','green'])
-# print(a.code_pegs, a.codebreaker)
+
+
 
 
 
