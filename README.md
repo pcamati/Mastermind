@@ -1,0 +1,1 @@
+This is a simple Python script that implements the Mastermind board game.
