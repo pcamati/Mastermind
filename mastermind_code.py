@@ -128,7 +128,7 @@ class game:
         self.key_pegs.append(['black']*black_pegs+['white']*white_pegs)
 
     def play_round(self, codemaker, codebreaker, round):
-        print(f"\n Round number {round} starts \n")
+        print(f"\n Round number {round+1} starts \n")
         self.set_decoding_board(codemaker)
         for attempt in range(game.number_attempts):
             guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ")
@@ -138,26 +138,33 @@ class game:
             self.check_key_pegs(guessed_attempt)
             self.display_board()
 
-            if guessed_attempt==self.decoding_board:
+            if guessed_attempt == self.decoding_board:
                 print(f"\n Congratulations {codebreaker.upper()}! You guessed right in {attempt+1} attempts. {attempt} points are added to {codebreaker.upper()} \n")
                 break
 
-    def display_score():
-        #create function that displays the score
-        pass
+        if round % 2 == 0:
+            self.score_player_one.append(attempt)
+            self.score_player_two.append(0)
+        else:
+            self.score_player_one.append(0)
+            self.score_player_two.append(attempt)          
+
+    def display_score(self, round):
+        print("\n Score \n")
+        print(f"                 {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
+        print(f"Round {round+1}: {self.score_player_one[round]} | {self.score_player_two[round]}")
+        print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
 
     def play_game(self):
         for round in range(self.rounds):
-            round += 1
-            if round % 2 == 1:
+            if round % 2 == 0:
                 self.codemaker = self.player_one
                 self.codebreaker = self.player_two
             else:
                 self.codemaker = self.player_two
                 self.codebreaker = self.player_one
             self.play_round(self.codemaker, self.codebreaker, round)
-            self.
-            self.display_score()
+            self.display_score(round)
 
 
 player_one_name = input("Please, input Player One's name: ")
