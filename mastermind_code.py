@@ -12,8 +12,10 @@ import os
 class game:
 
     decoding_board_size = 4
-    #for testing purposes gonna set the value to 2
-    number_attempts = 2 #12
+    #for testing purposes gonna set the value to 3
+    number_attempts = 3 #12
+    winning_condition = False
+    total_attempts = 0
 
     def __init__(self,number_rounds, player_one, player_two):
         if not isinstance(number_rounds, int):
@@ -74,11 +76,12 @@ class game:
 
     def play_round(self, codemaker, codebreaker, round):
         self.guessed_list = []
+        self.key_pegs = []
         print(f"\n Round number {round+1} starts \n")
         self.set_decoding_board(codemaker)
         os.system('cls')
         for attempt in range(game.number_attempts):
-            guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ")
+            guessed_attempt = input(f"\n {codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ")
             guessed_attempt = guessed_attempt.split()
             guessed_attempt = self.is_attempt_valid(guessed_attempt)            
             self.guessed_list.append(guessed_attempt)
@@ -86,21 +89,16 @@ class game:
             self.display_board()
 
             if guessed_attempt == self.decoding_board:
-                print(f"\n Congratulations {codebreaker.upper()}! You guessed right in {attempt+1} attempts. {attempt} points are added to {codebreaker.upper()} \n")
+                game.winning_condition = True
+                game.total_attempts = attempt+1
                 break
 
         if round % 2 == 0:
-            self.score_player_one.append(attempt+1)
+            self.score_player_one.append(attempt)
             self.score_player_two.append(0)
         else:
             self.score_player_one.append(0)
-            self.score_player_two.append(attempt+1)          
-
-    # def display_score(self, round):
-    #     print("\n Score \n")
-    #     print(f"              {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
-    #     print(f"Round {round+1}: {self.score_player_one[round]} | {self.score_player_two[round]}")
-    #     print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
+            self.score_player_two.append(attempt)          
 
     def display_score(self, round):
         print("\n Score \n")
@@ -109,6 +107,14 @@ class game:
             print(f"Round {i+1}: {self.score_player_one[i]} | {self.score_player_two[i]}")
         print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
 
+    def end_of_game(self):
+        print(f"\n The game has ended. {self.player_one.upper()} scored {sum(self.score_player_one)} and {self.player_two.upper()} scored {sum(self.score_player_two)}.")
+        if sum(self.score_player_one) == sum(self.score_player_two):
+            print("\n No player has won :(")
+        elif sum(self.score_player_one) > sum(self.score_player_two):
+            print(f"{self.player_one.upper()} has won! Congratulations!!")
+        else:
+            print(f"{self.player_two.upper()} has won! Congratulations!!")
 
     def play_game(self):
         for round in range(self.rounds):
@@ -119,9 +125,12 @@ class game:
                 self.codemaker = self.player_two
                 self.codebreaker = self.player_one
             self.play_round(self.codemaker, self.codebreaker, round)
-            self.display_score(round)
 
-#message for when the game ends and states who is the winner if any
+            if game.winning_condition:
+                print(f"\n Congratulations {self.codebreaker.upper()}! You finished the current round in {game.total_attempts} attempts. {game.total_attempts-1} points are added to {self.codemaker.upper()} \n")
+
+            self.display_score(round)
+        self.end_of_game()
 
 player_one_name = input("Please, input Player One's name: ")
 player_two_name = input ("Please, input Player Two's name: ")
