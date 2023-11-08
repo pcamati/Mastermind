@@ -12,8 +12,8 @@ import os
 class game:
 
     decoding_board_size = 4
-    #for testing purposes gonna set the value to 4
-    number_attempts = 4 #12
+    #for testing purposes gonna set the value to 2
+    number_attempts = 2 #12
 
     def __init__(self,number_rounds, player_one, player_two):
         if not isinstance(number_rounds, int):
@@ -73,6 +73,7 @@ class game:
         self.key_pegs.append(['black']*black_pegs+['white']*white_pegs)
 
     def play_round(self, codemaker, codebreaker, round):
+        self.guessed_list = []
         print(f"\n Round number {round+1} starts \n")
         self.set_decoding_board(codemaker)
         os.system('cls')
@@ -95,11 +96,19 @@ class game:
             self.score_player_one.append(0)
             self.score_player_two.append(attempt+1)          
 
+    # def display_score(self, round):
+    #     print("\n Score \n")
+    #     print(f"              {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
+    #     print(f"Round {round+1}: {self.score_player_one[round]} | {self.score_player_two[round]}")
+    #     print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
+
     def display_score(self, round):
         print("\n Score \n")
         print(f"              {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
-        print(f"Round {round+1}: {self.score_player_one[round]} | {self.score_player_two[round]}")
+        for i in range(round+1):
+            print(f"Round {i+1}: {self.score_player_one[i]} | {self.score_player_two[i]}")
         print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
+
 
     def play_game(self):
         for round in range(self.rounds):
@@ -112,7 +121,6 @@ class game:
             self.play_round(self.codemaker, self.codebreaker, round)
             self.display_score(round)
 
-#print the previous round scores as well at the end of each round
 #message for when the game ends and states who is the winner if any
 
 player_one_name = input("Please, input Player One's name: ")
