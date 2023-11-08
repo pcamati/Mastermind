@@ -1,64 +1,13 @@
-
 '''
-This program executes the game Mastermind ("Senha") where 
-two players compete against each other trying to guess
-the sequence of colored pegs the other player set up.
-
 Terms:
-
  - codemaker: player who creates the code
  - codebreaker: player who guesses the code
- - decoding_board: set of pins determined by the codemaker
+ - decoding_board: set of pins determined by the codemaker (should be the codebreaker, change)
  - code_pegs: the colored pins the codemaker can choose
  - key_pegs: white and black pins providing hints to the codebreaker
-
-Rules:
-
-The two players decide in advance how many games they will play,
-which must be an even number.
-One player becomes the codemaker, the other the codebreaker.
-The codemaker chooses a pattern of four code pegs. 
-Players decide in advance whether duplicates and blanks are allowed.
-If so, the codemaker may even choose four same-colored code pegs 
-or four blanks. 
-If blanks are not allowed in the code, the codebreaker may not use 
-blanks in their guesses. 
-The codemaker places the chosen pattern in the four holes covered 
-by the shield, visible to the codemaker but not to the codebreaker.
-The codebreaker tries to guess the pattern, in both order and color,
-within eight to twelve turns. 
-Each guess is made by placing a row of code pegs on the 
-decoding board.
-Once placed, the codemaker provides feedback by placing from zero 
-to four key pegs in the small holes of the row with the guess. 
-A colored key peg (usually black) is placed for each code peg from the guess which 
-is correct in both color and position. 
-A white key peg indicates the existence of a correct color code peg 
-placed in the wrong position.
-If there are duplicate colors in the guess, they cannot all be 
-awarded a key peg unless they correspond to the same number of 
-duplicate colors in the hidden code. 
-For example, if the hidden code is red-red-blue-blue and the player 
-guesses red-red-red-blue, the codemaker will award two colored 
-key pegs for the two correct reds, nothing for the third red as 
-there is not a third red in the code, and a colored key peg for 
-the blue. 
-No indication is given of the fact that the code also includes a 
-second blue.
-Once feedback is provided, another guess is made; 
-guesses and feedback continue to alternate until either the 
-codebreaker guesses correctly, or all rows on the decoding board 
-are full.
-Traditionally, players can only earn points when playing as the 
-codemaker. 
-The codemaker gets one point for each guess the codebreaker makes. 
-An extra point is earned by the codemaker if the codebreaker is 
-unable to guess the exact pattern within the given number of turns.
-(An alternative is to score based on the number of key pegs placed.)
-The winner is the one who has the most points after the agreed-upon 
-number of games are played.
-
 '''
+
+import os
 
 class game:
 
@@ -107,10 +56,6 @@ class game:
                 break
         return guessed_attempt
 
-    def is_correct_guess(guessed_attempt):
-        #check if the guess is the correct code
-        pass
-
     def check_key_pegs(self, guessed_attempt: list):
         black_pegs = 0
         white_pegs = 0
@@ -130,6 +75,7 @@ class game:
     def play_round(self, codemaker, codebreaker, round):
         print(f"\n Round number {round+1} starts \n")
         self.set_decoding_board(codemaker)
+        os.system('cls')
         for attempt in range(game.number_attempts):
             guessed_attempt = input(f"{codebreaker.upper()}, please guess a sequence of {game.decoding_board_size} colored pegs: ")
             guessed_attempt = guessed_attempt.split()
@@ -143,15 +89,15 @@ class game:
                 break
 
         if round % 2 == 0:
-            self.score_player_one.append(attempt)
+            self.score_player_one.append(attempt+1)
             self.score_player_two.append(0)
         else:
             self.score_player_one.append(0)
-            self.score_player_two.append(attempt)          
+            self.score_player_two.append(attempt+1)          
 
     def display_score(self, round):
         print("\n Score \n")
-        print(f"                 {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
+        print(f"              {self.player_one.upper()}'s score | {self.player_two.upper()}'s score")
         print(f"Round {round+1}: {self.score_player_one[round]} | {self.score_player_two[round]}")
         print(f"\n ### \n Total: {sum(self.score_player_one)} | {sum(self.score_player_two)}")
 
@@ -166,6 +112,8 @@ class game:
             self.play_round(self.codemaker, self.codebreaker, round)
             self.display_score(round)
 
+#print the previous round scores as well at the end of each round
+#message for when the game ends and states who is the winner if any
 
 player_one_name = input("Please, input Player One's name: ")
 player_two_name = input ("Please, input Player Two's name: ")
